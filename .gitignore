@@ -42,3 +42,6 @@
 
 # ide files
 .idea/
+
+# path
+obj/

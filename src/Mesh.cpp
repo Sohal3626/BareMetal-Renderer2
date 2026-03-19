@@ -1,0 +1,135 @@
+//
+// Created by desktop on 26. 3. 19..
+//
+
+#include "../include/data/Mesh.h"
+
+#include <algorithm>
+#include <fstream>
+#include <iostream>
+#include <sstream>
+#include <unordered_map>
+#include <vector>
+#include "../include/library/Geometry.h"
+using namespace std;
+
+void Mesh::set_indexStart(){
+    if (!subMeshes.empty()) {
+        subMeshes.back().indexCount = static_cast<uint32_t>(indices.size()) - subMeshes.back().indexStart;
+    }
+}
+
+bool Mesh::load_obj(const std::string& filename) {
+    vertices.reserve(1000);
+    std:: ifstream in;
+    in.open(filename, std::ifstream::in);
+    if (in.fail()) {
+        cerr << "Mising file -> " << filename << endl;
+        return false;
+    }
+    vector<Vec3> positions;
+    vector<Vec2> uvs;
+    vector<Vec3> normals;
+    positions.reserve(1000);
+    uvs.reserve(1000);
+    normals.reserve(1000);
+    std::map<FaceVertex, uint32_t> checkUnique;
+
+    std::string curr_mtl;
+    std::string line;
+    while (getline(in,line)) {
+        if (line.empty()) continue;
+        char trashc;
+        string trashs;
+        istringstream iss(line.c_str());
+        if (!line.compare(0, 7, "usemtl ")) {
+            set_indexStart();
+            MeshGroup group;
+            group.indexStart = static_cast<uint32_t>(indices.size());
+            group.materialIndex = -1; // 나중에매핑하는거잊지않기나중에매핑하는거잊지않기나중에매핑하는거잊지않기나중에매핑하는거잊지않기나중에매핑하는거잊지않기나중에매핑하는거잊지않기나중에매핑하는거잊지않기나중에매핑하는거잊지않기나중에매핑하는거잊지않기나중에매핑하는거잊지않기나중에매핑하는거잊지않기나중에매핑하는거잊지않기나중에매핑하는거잊지않기나중에매핑하는거잊지않기
+            subMeshes.push_back(group);
+
+            string mtlName;
+            iss >> trashs >> mtlName;
+            cout << "Using Material: " << mtlName << endl; // 이거나중에삭제이거나중에삭제이거나중에삭제이거나중에삭제이거나중에삭제이거나중에삭제이거나중에삭제이거나중에삭제이거나중에삭제이거나중에삭제이거나중에삭제이거나중에삭제이거나중에삭제이거나중에삭제이거나중에삭제이거나중에삭제이거나중에삭제이거나중에삭제이거나중에삭제이거나중에삭제이거나중에삭제이거나중에삭제이거나중에삭제이거나중에삭제이거나중에삭제
+        }else if (!line.compare(0, 2, "v ")) {
+            iss >> trashc;
+            Vec3 v;
+            iss >> v.x >> v.y >> v.z;
+            positions.push_back(v);
+        }else if (!line.compare(0, 3, "vt ")) {
+            iss >> trashc;
+            Vec2 t;
+            iss >> t.x >>  t.y;
+            uvs.push_back(t);
+        }else if (!line.compare(0, 3, "vn ")) {
+            iss >> trashc;
+            Vec3 n;
+            iss >> n.x >> n.y >> n.z;
+            normals.push_back(n);
+        }else if (!line.compare(0, 2, "f ")) {
+            iss >> trashc;
+
+            if (subMeshes.empty()) {
+                MeshGroup defaultGroup;
+                defaultGroup.indexStart = 0;
+                defaultGroup.indexCount = 0;
+                defaultGroup.materialIndex = -1;
+                subMeshes.push_back(defaultGroup);
+            }
+
+            string segment;
+            vector<FaceVertex> fvs;
+            while (iss >> segment) {
+                Vertex vertex;
+                ranges::replace(segment, '/', ' ');
+                istringstream ss(segment);
+                FaceVertex fv{-1, -1, -1};
+
+                ss >> fv.position;
+                if (ss >> fv.texCoord) {}
+                if (ss >> fv.normal) {}
+
+                if (fv.position > 0) fv.position--;
+                if (fv.texCoord > 0) fv.texCoord--;
+                if (fv.normal > 0) fv.normal--;
+                fvs.push_back(fv);
+            }
+            for (size_t i = 1; i < fvs.size() - 1; ++i) {
+                FaceVertex tri[3] = { fvs[0], fvs[i], fvs[i+1] };
+                    for (const FaceVertex& fv : tri) {
+                        if (checkUnique.find(fv) == checkUnique.end()) {
+                            Vertex vertex;
+                            Vec3 fvPos = positions[fv.position];
+                            vertex.position = {fvPos.x, fvPos.y, fvPos.z, 1.};
+                            if (fv.texCoord > -1) vertex.texCoord = uvs[fv.texCoord];
+                            if (fv.normal > -1) {
+                                Vec3 fvNormal = normals[fv.normal];
+                                vertex.normal = {fvNormal.x, fvNormal.y, fvNormal.z, 0.};
+                            }
+
+                            uint32_t idx = static_cast<uint32_t>(vertices.size());
+                            vertices.push_back(vertex);
+                            indices.push_back(idx);
+                            checkUnique[fv] = idx;
+                        }else{
+                            indices.push_back(checkUnique[fv]);
+                    }
+                }
+            }
+        }
+    }
+    set_indexStart();
+    in.close();
+
+    cout << "--- Mesh Load Report ---" << endl;
+    cout << "Vertices: " << vertices.size() << endl;
+    cout << "Indices:  " << indices.size() << endl;
+    cout << "SubMeshes: " << subMeshes.size() << endl;
+
+    for(int i=0; i < subMeshes.size(); i++) {
+        cout << " Group[" << i << "] Start: " << subMeshes[i].indexStart
+             << " Count: " << subMeshes[i].indexCount << endl;
+    }
+    return true;
+}

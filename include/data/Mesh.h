@@ -1,0 +1,58 @@
+//
+// Created by desktop on 26. 3. 19..
+//
+
+#ifndef TOYRENDERER2_MESH_H
+#define TOYRENDERER2_MESH_H
+#include <string>
+#include <vector>
+#include <cstdint>
+#include <functional>
+
+#include "../library/Geometry.h"
+#include "Material.h"
+
+struct alignas(16) Vertex {
+    Vec4 position;
+    Vec4 normal;
+    Vec2 texCoord;
+    float padding[2];
+
+    bool operator==(const Vertex& v) const {
+        return position == v.position && texCoord == v.texCoord && normal == v.normal;
+    }
+};
+
+class alignas(16) Mesh {
+public:
+    std::vector<Vertex> vertices;
+    std::vector<uint32_t> indices;
+
+    struct MeshGroup {
+        uint32_t indexStart;
+        uint32_t indexCount;
+        uint32_t materialIndex;
+    };
+    std::vector<MeshGroup> subMeshes;
+
+    bool load_obj(const std::string& filename);
+private:
+    void set_indexStart();
+};
+
+struct FaceVertex {
+    int position;
+    int texCoord;
+    int normal;
+    FaceVertex (const std::initializer_list<float> list){
+        auto it = list.begin();
+        while (it != list.end()) {
+            if (it != list.end()) position = *it++;
+            if (it != list.end()) texCoord = *it++;
+            if (it != list.end()) normal = *it++;
+        }
+    }
+    auto operator<=>(const FaceVertex&) const = default;
+};
+
+#endif //TOYRENDERER2_MESH_H
