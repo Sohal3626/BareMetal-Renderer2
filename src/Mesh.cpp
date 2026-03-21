@@ -71,7 +71,7 @@ bool Mesh::load_obj(const std::string& filename) {
             iss >> trashc;
 
             if (subMeshes.empty()) {
-                MeshGroup defaultGroup;
+                MeshGroup defaultGroup{};
                 defaultGroup.indexStart = 0;
                 defaultGroup.indexCount = 0;
                 defaultGroup.materialIndex = -1;
@@ -80,6 +80,7 @@ bool Mesh::load_obj(const std::string& filename) {
 
             string segment;
             vector<FaceVertex> fvs;
+            fvs.reserve(3);
             while (iss >> segment) {
                 Vertex vertex;
                 ranges::replace(segment, '/', ' ');
@@ -98,7 +99,7 @@ bool Mesh::load_obj(const std::string& filename) {
             for (size_t i = 1; i < fvs.size() - 1; ++i) {
                 FaceVertex tri[3] = { fvs[0], fvs[i], fvs[i+1] };
                     for (const FaceVertex& fv : tri) {
-                        if (checkUnique.find(fv) == checkUnique.end()) {
+                        if (!checkUnique.contains(fv)) {
                             Vertex vertex;
                             Vec3 fvPos = positions[fv.position];
                             vertex.position = {fvPos.x, fvPos.y, fvPos.z, 1.};

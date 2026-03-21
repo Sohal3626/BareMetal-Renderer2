@@ -40,11 +40,11 @@ private:
     void set_indexStart();
 };
 
-struct FaceVertex {
+struct alignas(16) FaceVertex {
     int position;
     int texCoord;
     int normal;
-    FaceVertex (const std::initializer_list<float> list){
+    FaceVertex (const std::initializer_list<int> list){
         auto it = list.begin();
         while (it != list.end()) {
             if (it != list.end()) position = *it++;

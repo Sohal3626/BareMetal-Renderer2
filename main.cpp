@@ -6,5 +6,5 @@
 int main()
 {
     Mesh mesh;
-    mesh.load_obj("../obj/african_head.obj");
+    mesh.load_obj("../obj/Miyu.obj");
 }
