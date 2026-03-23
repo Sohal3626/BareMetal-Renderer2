@@ -161,6 +161,8 @@ struct Vec4 {
 
     bool operator==(const Vec4 & vec4) const = default;
 
+    int operator*(int _cpp_par_) const;
+
     /* 외적
     Vec4 cross(const Vec3& v) const
     {
@@ -192,5 +194,24 @@ inline Vec4 operator*(const Mat<4, 4>& m, const Vec4& v) {
 }
 
 using Mat44 = Mat<4, 4>;
+
+inline Mat44 operator*(const Mat44& m, const Mat44& v) {
+    Mat44 res;
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            float temp = 0;
+            for (int k = 0; k < 4; k++) {
+                temp += m[i][k] * v[k][j];
+            }
+            res[i][j] = temp;
+        }
+    }
+    return res;
+}
+
+inline Mat44& operator*=(Mat44& m, Mat44& v) {
+    m = m * v;
+    return m;
+}
 
 #endif //TOYRENDERER2_GEOMETRY_H

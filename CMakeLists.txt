@@ -9,4 +9,5 @@ add_executable(ToyRenderer2 main.cpp
         src/Mesh.cpp
         include/data/Material.h
         include/Core.h
+        include/VertexShader.h
 )
