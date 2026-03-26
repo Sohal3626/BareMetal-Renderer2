@@ -28,11 +28,11 @@ public:
     [[nodiscard]] TFVertex VertexShader(const Vertex& in, int width, int height) const {
         TFVertex out;
 
-        Vec4 clip = mvp * in.position;
+        const Vec4 clip = mvp * in.position;
 
         float invW = 1;
         if (clip.w != 0) invW =  1 / clip.w;
-        Vec4 ndcP = clip * invW;
+        const Vec4 ndcP = clip * invW;
 
         out.position.x = (ndcP.x + 1.f) * 0.5f * static_cast<float>(width);
         out.position.y = (1.f - ndcP.y) * 0.5f * static_cast<float>(height);
