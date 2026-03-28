@@ -214,4 +214,14 @@ inline Mat44& operator*=(Mat44& m, Mat44& v) {
     return m;
 }
 
+static Vec3 normalize(const Vec3 &v) {
+    float norm = sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+    return (norm < 1e-6) ? v : Vec3{v.x/norm, v.y/norm, v.z/norm};
+}
+
+static Vec4 normalize(const Vec4 &v) {
+    float norm = sqrt(v.x * v.x + v.y * v.y + v.z * v.z + v.w * v.w);
+    return (norm < 1e-6) ? v : Vec4{v.x/norm, v.y/norm, v.z/norm, v.w/norm};
+}
+
 #endif //TOYRENDERER2_GEOMETRY_H
