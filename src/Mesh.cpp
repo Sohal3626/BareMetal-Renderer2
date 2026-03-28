@@ -109,7 +109,7 @@ bool Mesh::load_obj(const std::string& filename) {
                                 vertex.normal = {fvNormal.x, fvNormal.y, fvNormal.z, 0.};
                             }
 
-                            uint32_t idx = static_cast<uint32_t>(vertices.size());
+                            auto idx = static_cast<uint32_t>(vertices.size());
                             vertices.push_back(vertex);
                             indices.push_back(idx);
                             checkUnique[fv] = idx;
