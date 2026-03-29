@@ -5,6 +5,7 @@
 #ifndef TOYRENDERER2_GEOMETRY_H
 #define TOYRENDERER2_GEOMETRY_H
 #include <initializer_list>
+#include <span>
 
 template <int R, int C>
 struct Mat {
@@ -183,6 +184,10 @@ struct Vec2 {
     float& operator[](int i) { return (&x)[i]; }
 
     bool operator==(const Vec2 & vec2) const = default;
+
+    Vec2 operator-(const float& rhs) const {
+        return {x - rhs, y - rhs};
+    }
 };
 
 inline Vec4 operator*(const Mat<4, 4>& m, const Vec4& v) {
@@ -222,6 +227,18 @@ static Vec3 normalize(const Vec3 &v) {
 static Vec4 normalize(const Vec4 &v) {
     float norm = sqrt(v.x * v.x + v.y * v.y + v.z * v.z + v.w * v.w);
     return (norm < 1e-6) ? v : Vec4{v.x/norm, v.y/norm, v.z/norm, v.w/norm};
+}
+
+static Vec3 barycentric(const Vec2 p, const std::span<const Vec2, 3> pts) {
+    const Vec3 vx = {pts[1].x - pts[0].x, pts[2].x - pts[0].x, pts[0].x - p.x};
+    const Vec3 vy = {pts[1].y - pts[0].y, pts[2].y - pts[0].y, pts[0].y - p.y};
+    const Vec3 u = vx.cross(vy);
+    if (std::abs(u.z) < 1e-2) return {-1, 1, 1};
+
+    float u_val = u.x / u.z;
+    float v_val = u.y / u.z;
+
+    return {1.f - (u_val + v_val), u_val, v_val};
 }
 
 #endif //TOYRENDERER2_GEOMETRY_H
