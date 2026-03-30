@@ -164,13 +164,6 @@ struct Vec4 {
 
     int operator*(int _cpp_par_) const;
 
-    /* 외적
-    Vec4 cross(const Vec3& v) const
-    {
-
-    }
-    */
-
 };
 
 struct Vec2 {
