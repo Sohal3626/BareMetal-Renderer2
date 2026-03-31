@@ -10,9 +10,6 @@
 #include "Canvas.h"
 
 static void FillTriangle(Canvas& canvas, const std::span<const TFVertex, 3> pts) {
-    auto w = static_cast<float>(canvas.width);
-    auto h = static_cast<float>(canvas.height);
-
     float minX = pts[0].position.x, maxX = pts[0].position.x;
     float minY = pts[0].position.y, maxY = pts[0].position.y;
 
@@ -36,10 +33,11 @@ static void FillTriangle(Canvas& canvas, const std::span<const TFVertex, 3> pts)
 
     for (int i = yStart; i <= yEnd; i++) {
         for (int j = xStart; j <= xEnd; j++) {
-            Vec3 bary = barycentric(Vec2{static_cast<float>(j), static_cast<float>(i)}, tri);
+            const Vec3 bary = barycentric(Vec2{static_cast<float>(j), static_cast<float>(i)}, tri);
 
             if (bary.x < 0 || bary.y < 0 || bary.z < 0) continue;
-            Vec3 color = {1, 1, 1}; // 기본값 하얀색
+
+            const Vec3 color = {bary.x, bary.y, bary.z}; // 임시값 그라데이션
             // color = 프레그먼트 셰이더 호출
             canvas.setPixel(j, i, color);
         }
