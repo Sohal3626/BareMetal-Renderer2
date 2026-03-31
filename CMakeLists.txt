@@ -17,4 +17,5 @@ add_executable(ToyRenderer2 main.cpp
         include/VertexShader.h
         include/Rasterizer.h
         include/Canvas.h
+        src/Rasterizer.cpp
 )
