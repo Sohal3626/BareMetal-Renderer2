@@ -8,7 +8,7 @@
 
 using namespace std;
 
-static void FillTriangle(Canvas& canvas, const span<const TFVertex, 3> pts) {
+void FillTriangle(Canvas& canvas, const span<const TFVertex, 3> pts) {
     float minX = pts[0].position.x, maxX = pts[0].position.x;
     float minY = pts[0].position.y, maxY = pts[0].position.y;
 

@@ -9,6 +9,6 @@
 #include "../include/Canvas.h"
 #include "../include/VertexShader.h"
 
-static void FillTriangle(Canvas& canvas, std::span<const TFVertex, 3> pts);
+void FillTriangle(Canvas& canvas, std::span<const TFVertex, 3> pts);
 
 #endif //TOYRENDERER2_RASTERIZER_H

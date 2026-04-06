@@ -6,6 +6,7 @@
 #define TOYRENDERER2_GEOMETRY_H
 #include <initializer_list>
 #include <span>
+#include <cmath>
 
 template <int R, int C>
 struct Mat {
