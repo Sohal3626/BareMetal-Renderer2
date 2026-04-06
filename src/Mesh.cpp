@@ -44,7 +44,7 @@ bool Mesh::load_obj(const std::string& filename) {
         istringstream iss(line.c_str());
         if (!line.compare(0, 7, "usemtl ")) {
             set_indexStart();
-            MeshGroup group;
+            MeshGroup group{};
             group.indexStart = static_cast<uint32_t>(indices.size());
             group.materialIndex = -1; // 나중에매핑하는거잊지않기나중에매핑하는거잊지않기나중에매핑하는거잊지않기나중에매핑하는거잊지않기나중에매핑하는거잊지않기나중에매핑하는거잊지않기나중에매핑하는거잊지않기나중에매핑하는거잊지않기나중에매핑하는거잊지않기나중에매핑하는거잊지않기나중에매핑하는거잊지않기나중에매핑하는거잊지않기나중에매핑하는거잊지않기나중에매핑하는거잊지않기
             subMeshes.push_back(group);

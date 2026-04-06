@@ -26,7 +26,6 @@ public:
 
     [[nodiscard]] TFVertex vertexShader(const Vertex& in) const {
         TFVertex out;
-
         out.position = mvp * in.position;
         out.normal = Vec4(in.normal.x, in.normal.y, in.normal.z, 0.0f);
         out.texCoord = in.texCoord;

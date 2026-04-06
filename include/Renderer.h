@@ -11,19 +11,23 @@
 #include "library/Geometry.h"
 
 inline void DrawModel(Canvas &canvas, const Mesh &mesh, const VertexShader &vertexShader) {
+    std::cout << "Indices Size: " << mesh.indices.size() << std::endl;
+
     const int w = canvas.width;
     const int h = canvas.height;
-
     for (size_t i = 0; i < mesh.indices.size(); i+=3) {
         TFVertex tri[3];
         for (size_t j = 0; j < 3; j++) {
             const uint32_t vertexIndex = mesh.indices[i + j];
             const Vertex& v = mesh.vertices[vertexIndex];
+            //std::cout << v.position.x << " " << v.position.y << " " << v.position.z << std::endl;
+
             tri[j] = vertexShader.vertexShader(v);
 
             const float invW = tri[j].invW;
-            tri[j].position.x = (tri[j].position.x * invW + 1.0f) * 0.5f * w;
-            tri[j].position.y = (1.0f - tri[j].position.y * invW) * 0.5f * h;
+            tri[j].position.x = (tri[j].position.x * invW + 1.0f) * 0.5f * static_cast<float>(w);
+            tri[j].position.y = (1.0f - tri[j].position.y * invW) * 0.5f * static_cast<float>(h);
+            //std::cout << tri[j].position.x << ' ' << tri[j].position.y << std::endl;
         }
         FillTriangle(canvas, tri);
     }
