@@ -8,14 +8,18 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <limits>
 #include "../include/library/Geometry.h"
 
 struct Canvas {
-    int width = 0, height = 0;
+    const int width = 0, height = 0;
     std::vector<Vec3> pixels;
+    std::vector<float> depthBuffer;
 
-    Canvas(int w, int h) : width(w), height(h) {
+    Canvas(const int w, const int h) : width(w), height(h) {
         pixels.resize(width * height);
+        depthBuffer = std::vector<float>(width * height, std::numeric_limits<float>::max());
+
     }
 
     void setPixel(int x, int y, Vec3 color) {
