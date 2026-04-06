@@ -105,7 +105,7 @@ struct Vec3 {
     [[nodiscard]] float dot(const Vec3& v) const { return x * v.x + y * v.y + z * v.z; }
 
     // 외적
-    Vec3 cross(const Vec3& v) const { return { y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x }; }
+    [[nodiscard]] Vec3 cross(const Vec3& v) const { return { y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x }; }
 
     //비교
     bool operator==(const Vec3& v) const = default;
@@ -124,6 +124,7 @@ struct Vec4 {
             if (it != list.end()) x = *it++;
             if (it != list.end()) y = *it++;
             if (it != list.end()) z = *it++;
+            if (it != list.end()) w = *it++;
         }
     }
     Vec4& operator=(const Vec4& v) = default;
@@ -227,7 +228,7 @@ static Vec3 normalize(const Vec3 &v) {
 }
 
 static Vec4 normalize(const Vec4 &v) {
-    float norm = sqrt(v.x * v.x + v.y * v.y + v.z * v.z + v.w * v.w);
+    const float norm = std::sqrt(v.x * v.x + v.y * v.y + v.z * v.z + v.w * v.w);
     return (norm < 1e-6) ? v : Vec4{v.x/norm, v.y/norm, v.z/norm, v.w/norm};
 }
 
@@ -256,6 +257,40 @@ static Mat44 perspective(const float fovDeg, const float aspect, const float nea
     m[3][2] = -1.0f;
 
     return m;
+}
+
+static void translate(Mat44& model, const float x, const float y, const float z) {
+    model[0][3] += x;
+    model[1][3] += y;
+    model[2][3] += z;
+}
+
+static void rotate(Mat44& model, const float x, float y, float z) {
+    auto rotX = Mat44();
+    const float sx = std::sin(x);
+    const float cx = std::cos(x);
+    rotX[1][1] = cx;
+    rotX[1][2] = -sx;
+    rotX[2][1] = sx;
+    rotX[2][2] = cx;
+
+    auto rotY = Mat44();
+    const float sy = std::sin(y);
+    const float cy = std::cos(y);
+    rotY[0][0] = cy;
+    rotY[0][2] = sy;
+    rotY[2][0] = -sy;
+    rotY[2][2] = cy;
+
+    auto rotZ = Mat44();
+    const float sz = std::sin(z);
+    const float cz = std::cos(z);
+    rotZ[0][0] = cz;
+    rotZ[0][1] = -sz;
+    rotZ[1][0] = sz;
+    rotZ[1][1] = cz;
+
+    model *= rotZ *= rotY *= rotX;
 }
 
 #endif //TOYRENDERER2_GEOMETRY_H
