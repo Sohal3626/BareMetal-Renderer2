@@ -18,4 +18,5 @@ add_executable(ToyRenderer2 main.cpp
         include/Rasterizer.h
         include/Canvas.h
         src/Rasterizer.cpp
+        include/Renderer.h
 )

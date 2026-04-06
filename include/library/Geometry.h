@@ -36,6 +36,14 @@ struct Mat {
     const float* operator[](int i) const {
         return &data[i * C];
     }
+
+    void zero() {
+        for (int i = 0; i < R; i++) {
+            for (int j = 0; j < C; j++) {
+                data[i * C + j] = 0.;
+            }
+        }
+    }
 };
 
 struct Vec3 {
@@ -233,6 +241,21 @@ static Vec3 barycentric(const Vec2 p, const std::span<const Vec2, 3> pts) {
     float v_val = u.y / u.z;
 
     return {1.f - (u_val + v_val), u_val, v_val};
+}
+static Mat44 perspective(const float fovDeg, const float aspect, const float near, const float far) {
+    const float fovRad = fovDeg * (3.14159265f / 180.0f);
+    const float t = std::tan(fovRad / 2.0f);
+
+    Mat44 m;
+    m.zero();
+
+    m[0][0] = 1.0f / (aspect * t);
+    m[1][1] = 1.0f / t;
+    m[2][2] = -(far + near) / (far - near);
+    m[2][3] = -(2.0f * far * near) / (far - near);
+    m[3][2] = -1.0f;
+
+    return m;
 }
 
 #endif //TOYRENDERER2_GEOMETRY_H

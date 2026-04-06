@@ -14,35 +14,23 @@ struct TFVertex {
     float invW{};
 };
 
-class Shader {
+class VertexShader {
 public:
     Mat44 model;
     Mat44 view;
     Mat44 projection;
     Mat44 mvp;
 
-    void MVP() {
-        mvp = projection * view  * model;
-    }
+    VertexShader(const Mat44& model, const Mat44& view, const Mat44& projection)
+    : model(model), view(view), projection(projection) { mvp = projection * view * model; }
 
-    [[nodiscard]] TFVertex VertexShader(const Vertex& in, int width, int height) const {
+    [[nodiscard]] TFVertex vertexShader(const Vertex& in) const {
         TFVertex out;
 
-        const Vec4 clip = mvp * in.position;
-
-        float invW = 1;
-        if (clip.w != 0) invW =  1 / clip.w;
-        const Vec4 ndcP = clip * invW;
-
-        out.position.x = (ndcP.x + 1.f) * 0.5f * static_cast<float>(width);
-        out.position.y = (1.f - ndcP.y) * 0.5f * static_cast<float>(height);
-        out.position.z = ndcP.z;
-        out.position.w = clip.w;
-        out.invW = invW;
-
-        out.normal = {model * in.normal};
-
+        out.position = mvp * in.position;
+        out.normal = Vec4(in.normal.x, in.normal.y, in.normal.z, 0.0f);
         out.texCoord = in.texCoord;
+        out.invW = (out.position.w != 0.0f) ? (1.0f / out.position.w) : 1.0f;
 
         return out;
     }

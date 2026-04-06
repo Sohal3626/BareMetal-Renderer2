@@ -2,6 +2,7 @@
 
 #include "include/Canvas.h"
 #include "include/Rasterizer.h"
+#include "include/Renderer.h"
 #include "include/VertexShader.h"
 #include "include/data/Mesh.h"
 
@@ -11,15 +12,23 @@ int main() {
     constexpr int height = 600;
     Canvas canvas(width, height);
 
-    TFVertex triangle[] = {
-        TFVertex{ Vec4(400, 100, 0, 1), Vec2{1.f, 0.f} },
-        TFVertex{ Vec4(100, 500, 0, 1), Vec2(0.f, 1.f) },
-        TFVertex{ Vec4(700, 500, 0, 1), Vec2(0.f, 0.f) }
-    };
+    Mesh model;
+    model.load_obj("../filname");
 
-    FillTriangle(canvas, triangle);
+    // 3. 행렬 준비 (MVP)
+    const Mat44 modelMat;
+    const Mat44 viewMat;
+    const Mat44 projectionMat =
+        perspective(90.0f, static_cast<float>(width)/static_cast<float>(height), 0.1f, 100.0f);
 
-    canvas.save_ppm("triangle_test.ppm");
+    // 4. 버텍스 셰이더 생성
+    VertexShader vShader(modelMat, viewMat, projectionMat);
+
+    // 5. 렌더링 시작!
+    DrawModel(canvas, model, vShader);
+
+    // 6. 결과 확인
+    canvas.save_ppm("test_result.ppm");
 
     return 0;
 }
