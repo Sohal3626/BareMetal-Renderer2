@@ -41,8 +41,7 @@ void FillTriangle(Canvas& canvas, const span<const TFVertex, 3> pts) {
 
             const Vec3 color = {bary.x, bary.y, bary.z}; // 임시값 그라데이션
             // color = 프레그먼트 셰이더 호출
-            canvas.depthBuffer[i * w + j] = depth;
-            canvas.setPixel(j, i, color);
+            canvas.setPixel(j, i, depth, color);
         }
     }
 }

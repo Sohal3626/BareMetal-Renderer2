@@ -5,7 +5,6 @@
 #ifndef TOYRENDERER2_RASTERIZER_H
 #define TOYRENDERER2_RASTERIZER_H
 
-#include "../include/Rasterizer.h"
 #include "../include/Canvas.h"
 #include "../include/VertexShader.h"
 

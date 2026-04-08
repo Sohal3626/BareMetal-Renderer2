@@ -22,9 +22,11 @@ struct Canvas {
 
     }
 
-    void setPixel(int x, int y, Vec3 color) {
+    void setPixel(const int x, const int y, const float depth, const Vec3 color) {
         if (!(x >= 0 && x < width && y >= 0 && y < height)) return;
-        pixels[x + y * width] = color;
+        const int idx = width * y + x;
+        pixels[idx] = color;
+        depthBuffer[idx] = depth;
     }
 
     void save_ppm(const std::string &filename) const {
