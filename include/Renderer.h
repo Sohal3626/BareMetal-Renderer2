@@ -9,12 +9,18 @@
 #include "VertexShader.h"
 #include "data/Mesh.h"
 #include "library/Geometry.h"
+#include <omp.h>
+#include <chrono>
 
 inline void DrawModel(Canvas &canvas, const Mesh &mesh, const VertexShader &vertexShader) {
     std::cout << "Indices Size: " << mesh.indices.size() << std::endl;
 
+    auto start = std::chrono::high_resolution_clock::now();
+
     const int w = canvas.width;
     const int h = canvas.height;
+
+    #pragma omp parallel for schedule(dynamic, 100)
     for (size_t i = 0; i < mesh.indices.size(); i+=3) {
         TFVertex tri[3];
         for (size_t j = 0; j < 3; j++) {
@@ -31,6 +37,10 @@ inline void DrawModel(Canvas &canvas, const Mesh &mesh, const VertexShader &vert
         }
         FillTriangle(canvas, tri);
     }
+
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double, std::milli> elapsed = end - start;
+    std::cout << "Rendering Time: " << elapsed.count() << " ms" << std::endl;
 }
 
 #endif //TOYRENDERER2_RENDERER_H

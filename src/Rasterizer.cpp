@@ -5,6 +5,7 @@
 #include "../include/Canvas.h"
 #include "../include/VertexShader.h"
 #include <span>
+#include <atomic>
 
 using namespace std;
 
@@ -34,15 +35,24 @@ void FillTriangle(Canvas& canvas, const span<const TFVertex, 3> pts) {
 
     for (int i = yStart; i <= yEnd; i++) {
         for (int j = xStart; j <= xEnd; j++) {
+            const int idx = i * w + j;
             const Vec3 bary = barycentric(Vec2{static_cast<float>(j), static_cast<float>(i)}, tri);
 
             const float depth = pts[0].position.z * bary.x + pts[1].position.z * bary.y + pts[2].position.z * bary.z;
-            if (bary.x < 0 || bary.y < 0 || bary.z < 0 || depth > canvas.depthBuffer[i * w + j]) continue;
+            if (bary.x < 0 || bary.y < 0 || bary.z < 0) continue;
 
-            const Vec3 color = {bary.x, bary.y, bary.z}; // 임시값 그라데이션
-            // color = 프레그먼트 셰이더 호출
-            canvas.depthBuffer[i * w + j] = depth;
-            canvas.setPixel(j, i, color);
+            std::atomic_ref<float> target_depth(canvas.depthBuffer[idx]);
+
+            float old_depth = target_depth.load(memory_order_relaxed);
+            while (depth <= old_depth) {
+                if (target_depth.compare_exchange_weak(
+                    old_depth, depth, memory_order_release, memory_order_relaxed)) {
+                    const Vec3 color = {bary.x, bary.y, bary.z}; // 임시값 그라데이션
+                    // color = 프레그먼트 셰이더 호출
+                    canvas.setPixel(j, i, color);
+                    break;
+                }
+            }
         }
     }
 }
