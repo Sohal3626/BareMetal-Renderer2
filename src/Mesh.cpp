@@ -20,8 +20,8 @@ void Mesh::set_indexStart(){
 }
 
 bool Mesh::loadObj(const std::string& filename) {
-    vertices.reserve(1000);
-    std:: ifstream in;
+    vertices.reserve(10000);
+    std::ifstream in;
     in.open(filename, std::ifstream::in);
     if (in.fail()) {
         cerr << "Mising file -> " << filename << endl;
@@ -40,18 +40,16 @@ bool Mesh::loadObj(const std::string& filename) {
     while (getline(in,line)) {
         if (line.empty()) continue;
         char trashc;
-        string trashs;
         istringstream iss(line.c_str());
         if (!line.compare(0, 7, "usemtl ")) {
+            string trashs;
             set_indexStart();
             MeshGroup group{};
             group.indexStart = static_cast<uint32_t>(indices.size());
-            group.materialIndex = -1; // 나중에매핑하는거잊지않기나중에매핑하는거잊지않기나중에매핑하는거잊지않기나중에매핑하는거잊지않기나중에매핑하는거잊지않기나중에매핑하는거잊지않기나중에매핑하는거잊지않기나중에매핑하는거잊지않기나중에매핑하는거잊지않기나중에매핑하는거잊지않기나중에매핑하는거잊지않기나중에매핑하는거잊지않기나중에매핑하는거잊지않기나중에매핑하는거잊지않기
+            iss >> trashs >> group.mtlName;
             subMeshes.push_back(group);
 
-            string mtlName;
-            iss >> trashs >> mtlName;
-            cout << "Using Material: " << mtlName << endl; // 이거나중에삭제이거나중에삭제이거나중에삭제이거나중에삭제이거나중에삭제이거나중에삭제이거나중에삭제이거나중에삭제이거나중에삭제이거나중에삭제이거나중에삭제이거나중에삭제이거나중에삭제이거나중에삭제이거나중에삭제이거나중에삭제이거나중에삭제이거나중에삭제이거나중에삭제이거나중에삭제이거나중에삭제이거나중에삭제이거나중에삭제이거나중에삭제이거나중에삭제
+            cout << "Using Material: " << group.mtlName << endl;
         }else if (!line.compare(0, 2, "v ")) {
             iss >> trashc;
             Vec3 v;
@@ -74,7 +72,8 @@ bool Mesh::loadObj(const std::string& filename) {
                 MeshGroup defaultGroup{};
                 defaultGroup.indexStart = 0;
                 defaultGroup.indexCount = 0;
-                defaultGroup.materialIndex = -1;
+                defaultGroup.mtlId = 65535;
+                defaultGroup.mtlName = "default";
                 subMeshes.push_back(defaultGroup);
             }
 
@@ -133,4 +132,10 @@ bool Mesh::loadObj(const std::string& filename) {
              << " Count: " << subMeshes[i].indexCount << endl;
     }
     return true;
+}
+
+void Mesh::linkMtl(const Material &mtls) {
+    for (auto& group : subMeshes) {
+        group.mtlId = mtls.get(group.mtlName).materialId;
+    }
 }

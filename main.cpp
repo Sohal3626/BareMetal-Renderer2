@@ -17,6 +17,11 @@ int main() {
     Mesh model;
     model.loadObj("../obj/Mymodel.obj");
 
+    Material mtl;
+    mtl.loadMtl("../mtl/Mymtl.mtl");
+
+    model.linkMtl(mtl);
+
     // 3. 행렬 준비
     Mat44 modelMat;
     translate(modelMat, 0, -0.0, -2.0);
