@@ -15,7 +15,7 @@ int main() {
     Canvas canvas(width, height);
 
     Mesh model;
-    model.loadObj("../obj/african_head.obj");
+    model.loadObj("../obj/Mymodel.obj");
 
     // 3. 행렬 준비
     Mat44 modelMat;

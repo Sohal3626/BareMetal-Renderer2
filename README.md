@@ -30,7 +30,8 @@ CPU 기반 렌더링 파이프라인을 재설계하는 프로젝트입니다.
 [1일차-Mesh.h](<./docs/개발 일지/1일차.md>)  
 [2일차-VertexShader.h](<./docs/개발 일지/2일차.md>)  
 [3일차-barycentric & canvas, 4일차 - Rasterizer](<./docs/개발 일지/3,4일차.md>)  
-[5일차-Depth Buffer & Renderer](<./docs/개발 일지/5일차.md>)
+[5일차-Depth Buffer & Renderer](<./docs/개발 일지/5일차.md>)  
+[5.5일차-병렬 프로그래밍](<./docs/개발 일지/5.5일차.md>)
 
 ---
 
