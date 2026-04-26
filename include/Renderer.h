@@ -20,7 +20,7 @@ inline void DrawModel(Canvas &canvas, const Mesh &mesh, const VertexShader &vert
     const int w = canvas.width;
     const int h = canvas.height;
 
-    #pragma omp parallel for schedule(dynamic, 100)
+    #pragma omp parallel for
     for (size_t i = 0; i < mesh.indices.size(); i+=3) {
         TFVertex tri[3];
         for (size_t j = 0; j < 3; j++) {
@@ -35,7 +35,7 @@ inline void DrawModel(Canvas &canvas, const Mesh &mesh, const VertexShader &vert
             tri[j].position.y = (1.0f - tri[j].position.y * invW) * 0.5f * static_cast<float>(h);
             //std::cout << tri[j].position.x << ' ' << tri[j].position.y << std::endl;
         }
-        FillTriangle(canvas, tri);
+        fillTriangle(canvas, tri);
     }
 
     auto end = std::chrono::high_resolution_clock::now();

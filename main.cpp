@@ -10,21 +10,21 @@
 
 // TIP 코드를 <b>Run</b>하려면 <shortcut actionId="Run"/>을(를) 누르거나 여백에서 <icon src="AllIcons.Actions.Execute"/> 아이콘을 클릭하세요.
 int main() {
-    constexpr int width = 300;
-    constexpr int height = 400;
+    constexpr int width = 1920;
+    constexpr int height = 1080;
     Canvas canvas(width, height);
 
     Mesh model;
-    model.load_obj("../obj/mymodel.obj");
+    model.loadObj("../obj/african_head.obj");
 
     // 3. 행렬 준비
     Mat44 modelMat;
-    translate(modelMat, 0, 0, 0);
+    translate(modelMat, 0, -0.0, -2.0);
     rotate (modelMat, 0, 0, 0);
 
     Mat44 viewMat;
 
-    translate(viewMat, 0, 0, -3.f);
+    translate(viewMat, 0, 0, -1.f);
     const Mat44 projectionMat =
         perspective(45.0f, static_cast<float>(width)/static_cast<float>(height), 0.1f, 1000.0f);
 

@@ -9,7 +9,7 @@
 
 using namespace std;
 
-void FillTriangle(Canvas& canvas, const span<const TFVertex, 3> pts) {
+void fillTriangle(Canvas& canvas, const span<const TFVertex, 3> pts) {
     const int w = canvas.width;
 
     float minX = pts[0].position.x, maxX = pts[0].position.x;

@@ -19,7 +19,7 @@ void Mesh::set_indexStart(){
     }
 }
 
-bool Mesh::load_obj(const std::string& filename) {
+bool Mesh::loadObj(const std::string& filename) {
     vertices.reserve(1000);
     std:: ifstream in;
     in.open(filename, std::ifstream::in);

@@ -35,7 +35,7 @@ public:
     };
     std::vector<MeshGroup> subMeshes;
 
-    bool load_obj(const std::string& filename);
+    bool loadObj(const std::string& filename);
 private:
     void set_indexStart();
 };
