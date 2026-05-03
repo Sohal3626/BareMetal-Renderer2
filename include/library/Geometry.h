@@ -4,6 +4,7 @@
 
 #ifndef TOYRENDERER2_GEOMETRY_H
 #define TOYRENDERER2_GEOMETRY_H
+#include <cmath>
 #include <initializer_list>
 #include <span>
 #include <cmath>
@@ -67,6 +68,7 @@ struct Vec3 {
 
     // 벡터덧셈
     Vec3 operator+(Vec3& v) const { return {x + v.x, y + v.y, z + v.z}; }
+    Vec3 operator+(const Vec3& v) const { return {x + v.x, y + v.y, z + v.z}; }
     Vec3& operator+=(Vec3& v) {
         x += v.x;
         y += v.y;
@@ -76,6 +78,7 @@ struct Vec3 {
 
     // 벡터뺼셈
     Vec3 operator-(Vec3& v) const { return {x - v.x, y - v.y, z - v.z}; }
+    Vec3 operator-(const Vec3& v) const { return {x - v.x, y - v.y, z - v.z}; }
     Vec3& operator-=(Vec3& v) {
         x -= v.x;
         y -= v.y;
@@ -133,19 +136,23 @@ struct Vec4 {
 
     // 벡터덧셈
     Vec4 operator+(Vec4& v) const { return {x + v.x, y + v.y, z + v.z}; }
-    Vec4& operator+=(const Vec3& v) {
+    Vec4 operator+(const Vec4& v) const  { return {x + v.x, y + v.y, z + v.z}; };
+    Vec4& operator+=(const Vec4& v) {
         x += v.x;
         y += v.y;
         z += v.z;
+        w += v.w;
         return *this;
     }
 
     // 벡터뺼셈
-    Vec4 operator-(Vec3& v) const { return {x - v.x, y - v.y, z - v.z}; }
-    Vec4& operator-=(const Vec3& v) {
+    Vec4 operator-(Vec4& v) const { return {x - v.x, y - v.y, z - v.z}; }
+    Vec4 operator-(const Vec4& v) const { return {x - v.x, y - v.y, z - v.z}; }
+    Vec4& operator-=(const Vec4& v) {
         x -= v.x;
         y -= v.y;
         z -= v.z;
+        w -= v.w;
         return *this;
     }
 
@@ -173,7 +180,6 @@ struct Vec4 {
     bool operator==(const Vec4 & vec4) const = default;
 
     int operator*(int _cpp_par_) const;
-
 };
 
 struct Vec2 {
@@ -223,7 +229,7 @@ inline Mat44& operator*=(Mat44& m, Mat44& v) {
 }
 
 static Vec3 normalize(const Vec3 &v) {
-    float norm = sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+    const float norm = std::sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
     return (norm < 1e-6) ? v : Vec3{v.x/norm, v.y/norm, v.z/norm};
 }
 
