@@ -19,10 +19,10 @@ void Mesh::set_indexStart(){
     }
 }
 
-bool Mesh::loadObj(const std::string& filename) {
+bool Mesh::loadObj(const string& filename) {
     vertices.reserve(10000);
     std::ifstream in;
-    in.open(filename, std::ifstream::in);
+    in.open(filename, ifstream::in);
     if (in.fail()) {
         cerr << "Mising file -> " << filename << endl;
         return false;
@@ -33,16 +33,16 @@ bool Mesh::loadObj(const std::string& filename) {
     positions.reserve(1000);
     uvs.reserve(1000);
     normals.reserve(1000);
-    std::map<FaceVertex, uint32_t> checkUnique;
+    map<FaceVertex, uint32_t> checkUnique;
 
-    std::string curr_mtl;
-    std::string line;
+    string curr_mtl;
+    string line;
     while (getline(in,line)) {
         if (line.empty()) continue;
         char trashc;
+        string trashs;
         istringstream iss(line.c_str());
         if (!line.compare(0, 7, "usemtl ")) {
-            string trashs;
             set_indexStart();
             MeshGroup group{};
             group.indexStart = static_cast<uint32_t>(indices.size());
@@ -56,12 +56,12 @@ bool Mesh::loadObj(const std::string& filename) {
             iss >> v.x >> v.y >> v.z;
             positions.push_back(v);
         }else if (!line.compare(0, 3, "vt ")) {
-            iss >> trashc;
+            iss >> trashs;
             Vec2 t;
             iss >> t.x >>  t.y;
             uvs.push_back(t);
         }else if (!line.compare(0, 3, "vn ")) {
-            iss >> trashc;
+            iss >> trashs;
             Vec3 n;
             iss >> n.x >> n.y >> n.z;
             normals.push_back(n);
@@ -96,8 +96,7 @@ bool Mesh::loadObj(const std::string& filename) {
                 fvs.push_back(fv);
             }
             for (size_t i = 1; i < fvs.size() - 1; ++i) {
-                FaceVertex tri[3] = { fvs[0], fvs[i], fvs[i+1] };
-                    for (const FaceVertex& fv : tri) {
+                for (FaceVertex tri[3] = { fvs[0], fvs[i], fvs[i+1] }; const FaceVertex& fv : tri) {
                         if (!checkUnique.contains(fv)) {
                             Vertex vertex;
                             Vec3 fvPos = positions[fv.position];
@@ -135,7 +134,16 @@ bool Mesh::loadObj(const std::string& filename) {
 }
 
 void Mesh::linkMtl(const Material &mtls) {
-    for (auto& group : subMeshes) {
-        group.mtlId = mtls.get(group.mtlName).materialId;
+    for (auto& group : subMeshes) group.mtlId = mtls.get(group.mtlName).materialId;
+}
+
+bool Mesh::hasMtl() const {
+    return ranges::any_of(subMeshes, [](const auto& g) { return g.mtlId != 65535; });
+}
+
+uint16_t Mesh::getMtlId(const int index) const {
+    for (const auto& g : subMeshes) {
+        if (index > g.indexStart && index < g.indexStart + g.indexCount) return g.mtlId;
     }
+    return 65535;
 }

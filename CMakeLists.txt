@@ -21,15 +21,17 @@ find_package(OpenMP REQUIRED)
 add_executable(ToyRenderer2
         main.cpp
         src/Mesh.cpp
-        src/Rasterizer.cpp
+        src/Rasterizer_impl.hpp
         include/library/Geometry.h
         include/data/Mesh.h
         include/data/Material.h
         include/VertexShader.h
-        include/Rasterizer.h
+        include/Rasterizer_impl.h
         include/Canvas.h
         include/Renderer.h
         src/Material.cpp
+        include/Fragment/PhongShader.h
+        include/Fragment/FragmentIn.h
 )
 
 if(OpenMP_CXX_FOUND)
