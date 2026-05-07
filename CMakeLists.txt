@@ -32,6 +32,7 @@ add_executable(ToyRenderer2
         src/Material.cpp
         include/Fragment/PhongShader.h
         include/Fragment/FragmentIn.h
+        include/Fragment/BlinnPhongShader.h
 )
 
 if(OpenMP_CXX_FOUND)
