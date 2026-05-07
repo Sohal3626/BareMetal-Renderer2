@@ -20,11 +20,11 @@
         model.loadObj("../obj/Mymodel.obj");
 
         Material mtl;
-        mtl.loadMtl("../mtl/Mymtl.mtl");
+        mtl.loadMtl("../mtl/Mytml.mtl");
 
         // 3. 행렬 준비
         Mat44 modelMat;
-        translate(modelMat, 0, -0.0, -2.0);
+        translate(modelMat, 0, -0.7, -2.0);
         rotate (modelMat, 0, 0, 0);
 
         Mat44 viewMat;

@@ -40,10 +40,14 @@ public:
         if (baseColor.x == 0 && baseColor.y == 0 && baseColor.z == 0) {
             baseColor = Vec3{0.5f, 0.5f, 0.5f};
         }
-
         const Vec3 sepcColor = Vec3{1.0f, 1.0f, 1.0f} * specular;
+        const Vec3 result = baseColor * diff + mtl.ambient * globalAmbientIntensity + sepcColor;
 
-        return baseColor * diff + mtl.ambient * globalAmbientIntensity + sepcColor;
+        return Vec3{
+            std::min(result.x, 1.0f),
+            std::min(result.y, 1.0f),
+            std::min(result.z, 1.0f)
+        };
     }
 private:
     const float globalAmbientIntensity = 0.5f;
