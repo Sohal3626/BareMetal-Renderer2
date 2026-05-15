@@ -20,14 +20,14 @@ int main() {
     Canvas canvas3(width, height);
 
     Mesh model;
-    model.loadObj("../obj/Miyu.obj");
+    model.loadObj("../obj/african_head.obj");
 
     Material mtl;
-    mtl.loadMtl("../mtl/asdf.mtl");
+    mtl.loadMtl("../mtl/Mymtl.mtl");
 
     // 3. 행렬 준비
     Mat44 modelMat;
-    translate(modelMat, 0, -0.7, -2.0);
+    translate(modelMat, 0, -0.0, -2.0);
     rotate (modelMat, 0, 0, 0);
 
     Mat44 viewMat;
