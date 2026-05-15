@@ -1,6 +1,7 @@
 //
 // Created by Sohal03 on 26. 3. 31..
 //
+#pragma once
 #include "../include/Rasterizer_impl.h"
 #include "../include/Canvas.h"
 #include "../include/VertexShader.h"
@@ -11,7 +12,7 @@
 using namespace std;
 
 template <typename FragmentShaderType>
-void fillTriangle(Canvas& canvas, const span<const TFVertex, 3> pts, FragmentShaderType& shader) {
+void fillTriangle(Canvas& canvas, const span<const TFVertex, 3> pts, FragmentShaderType& shader, const Vec4 faceNormal) {
     const int w = canvas.width;
 
     float minX = pts[0].position.x, maxX = pts[0].position.x;
@@ -43,6 +44,7 @@ void fillTriangle(Canvas& canvas, const span<const TFVertex, 3> pts, FragmentSha
             in.worldPos = pts[0].worldPos * bary.x + pts[1].worldPos * bary.y + pts[2].worldPos * bary.z;
             in.normal = pts[0].normal * bary.x + pts[1].normal * bary.y + pts[2].normal * bary.z;
             in.texCoord = pts[0].texCoord * bary.x + pts[1].texCoord * bary.y + pts[2].texCoord * bary.z;
+            in.faceNormal = faceNormal;
 
             const float depth = pts[0].position.z * bary.x + pts[1].position.z * bary.y + pts[2].position.z * bary.z;
             if (bary.x < 0 || bary.y < 0 || bary.z < 0) continue;
@@ -53,8 +55,8 @@ void fillTriangle(Canvas& canvas, const span<const TFVertex, 3> pts, FragmentSha
             while (depth <= old_depth) {
                 if (target_depth.compare_exchange_weak(
                     old_depth, depth, memory_order_release, memory_order_relaxed)) {
-                    //cout << color.x << color.y << color.z << endl;
                     const Vec3 color = shader(in);
+                    // cout << color.x << color.y << color.z << endl;
                     canvas.setPixel(j, i, color);
                     break;
                 }

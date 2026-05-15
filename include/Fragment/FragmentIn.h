@@ -11,6 +11,8 @@
 struct alignas(16) FragmentIn {
     Vec4 normal;
 
+    Vec4 faceNormal;
+
     Vec3 worldPos;
     float invW;
 

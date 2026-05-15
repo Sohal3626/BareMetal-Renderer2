@@ -17,7 +17,7 @@
 inline material defaultMtl;
 
 template <typename FragmentShaderType>
-inline void DrawModel(Canvas& canvas, Mesh& mesh, const Material& materials,
+void DrawModel(Canvas& canvas, Mesh& mesh, const Material& materials,
     const VertexShader& vertexShader, const Vec3 lightPos) {
     std::cout << "Indices Size: " << mesh.indices.size() << std::endl;
 
@@ -27,7 +27,7 @@ inline void DrawModel(Canvas& canvas, Mesh& mesh, const Material& materials,
 
     for (const auto& group : mesh.subMeshes) {
         const material& mtl = materials.get(group.mtlName);
-        FragmentShaderType shader(mtl, lightPos);
+        FragmentShaderType fShader(mtl, lightPos, vertexShader.cameraWorldPos);
 
         const int w = canvas.width;
         const int h = canvas.height;
@@ -49,11 +49,12 @@ inline void DrawModel(Canvas& canvas, Mesh& mesh, const Material& materials,
 
             Vec3 edge1 = tri[1].worldPos - tri[0].worldPos;
             Vec3 edge2 = tri[2].worldPos - tri[0].worldPos;
-            if (const Vec3 faceNormal = edge2.cross(edge1); faceNormal.z >= 0) {
+            Vec3 faceNormal = edge1.cross(edge2);
+            if (faceNormal.z <= 0) {
                 continue;
             }
-
-            fillTriangle(canvas, tri, shader);
+            faceNormal = normalize(faceNormal);
+            fillTriangle(canvas, tri, fShader, {faceNormal.x, faceNormal.y, faceNormal.z, 0});
         }
     }
 

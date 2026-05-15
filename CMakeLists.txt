@@ -33,6 +33,7 @@ add_executable(ToyRenderer2
         include/Fragment/PhongShader.h
         include/Fragment/FragmentIn.h
         include/Fragment/BlinnPhongShader.h
+        include/Fragment/FlatShader.h
 )
 
 if(OpenMP_CXX_FOUND)
