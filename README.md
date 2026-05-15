@@ -18,10 +18,11 @@ CPU 기반 렌더링 파이프라인을 재설계하는 프로젝트입니다.
 - Vertex Shader 구현
 - Barycentric 기반 래스터라이징
 - Depth Buffer 적용
+- .mtl File parsing
+- Flat Shading
+- Phong Shading
 
 ### 예정 기능
-- Phong / Gouraud Shading
-- .mtl file Parsing
 - Texture Mapping
 - Alpha blending
   
