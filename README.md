@@ -34,8 +34,8 @@
 [3일차-barycentric & canvas, 4일차 - Rasterizer](<./docs/개발 일지/3,4일차.md>)  
 [5일차-Depth Buffer & Renderer](<./docs/개발 일지/5일차.md>)  
 [5.5일차-병렬 프로그래밍](<./docs/개발 일지/5.5일차.md>)  
-[6일차-Material](<./docs/개발 일지/6일차.md>)
-[7일차-Material](<./docs/개발 일지/7일차.md>)
+[6일차-Material](<./docs/개발 일지/6일차.md>)  
+[7일차-Fragment Shading](<./docs/개발 일지/7일차.md>)
 
 ---
 
