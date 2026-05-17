@@ -71,3 +71,8 @@
 - Perspective divide 및 viewport 변환을 수행합니다.
 - Rasterizer를 호출하여 삼각형을 화면에 렌더링합니다.
 - OpenMP를 사용하여 병렬로 렌더링을 수행합니다.
+
+---
+
+ # 참고 자료
+ [Tiny Renderer](https://github.com/ssloy/tinyrenderer)
