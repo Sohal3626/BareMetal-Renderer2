@@ -33,9 +33,7 @@ public:
             else if (fakeDiff > 0.4f) intensity = 0.5f;
             else intensity = 0.15f;
 
-            const float spec = std::pow(std::max(V.dot(R), 0.0f), 64.0f);
-            const float specFactor = (spec > 0.5f) ? 0.4f : 0.0f;
-            return Vec3{specFactor, specFactor, specFactor,} + Vec3{1.0f, 1.0f, 1.0f} * intensity;
+            return Vec3{1.0f, 1.0f, 1.0f} * intensity;
         }
 
         const float diff = std::max(N.dot(L), 0.f);
@@ -48,12 +46,10 @@ public:
         }
         float intensity = 0.f;
         if (diff > 0.8f) intensity = 1.0f;
-        else if (diff > 0.4f) intensity = 0.95f;
+        else if (diff > 0.4f) intensity = 0.75f;
         else intensity = 0.5f;
         const float spec = std::pow(std::max(V.dot(R), 0.0f), mtl.shininess);
-        const Vec3 specColor = Vec3{1, 1, 1} * spec;
-        const float specFactor = (spec > 0.5f) ? 0.4f : 0.0f;
-        baseColor = Vec3{specFactor, specFactor, specFactor,} + baseColor * intensity;
+        baseColor = baseColor * intensity;
         constexpr float gamma = 1.4f;
         const Vec3 finalColor{
             std::pow(std::max(baseColor.x, 0.0f), 1.0f / gamma),
