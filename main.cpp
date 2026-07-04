@@ -9,7 +9,9 @@
 #include "include/library/Geometry.h"
 #include "include/Fragment/PhongShader.h"
 #include "include/Fragment/BlinnPhongShader.h"
+#include "include/Fragment/CelShader.h"
 #include "include/Fragment/FlatShader.h"
+#include "include/Fragment/UnlitShader.h"
 
 // TIP 코드를 <b>Run</b>하려면 <shortcut actionId="Run"/>을(를) 누르거나 여백에서 <icon src="AllIcons.Actions.Execute"/> 아이콘을 클릭하세요.
 int main() {
@@ -28,7 +30,7 @@ int main() {
     // 3. 행렬 준비
     Mat44 modelMat;
     translate(modelMat, 0, -0.0, -2.0);
-    rotate (modelMat, 0, 0, 0);
+    rotate (modelMat, 0.0, 0.0, 0);
 
     Mat44 viewMat;
 
@@ -40,13 +42,19 @@ int main() {
     const VertexShader vShader(modelMat, viewMat, projectionMat);
 
     // 5. 테스트
-    DrawModel<FlatShader>(canvas, model, mtl, vShader, Vec3{0, 0, 3});
+    DrawModel<FlatShader>(canvas, model, mtl, vShader, Vec3{0, 1.5, 3});
     canvas.save_ppm("test_result.ppm");
 
-    DrawModel<PhongShader>(canvas2, model, mtl, vShader, Vec3{0, 0, 3});
+    DrawModel<PhongShader>(canvas2, model, mtl, vShader, Vec3{0, 1.5, 3});
     canvas2.save_ppm("test_result2.ppm");
 
-    DrawModel<BlinnPhongShader>(canvas3, model, mtl, vShader, Vec3{0, 0, 3});
+    DrawModel<BlinnPhongShader>(canvas3, model, mtl, vShader, Vec3{0, 1.5, 3});
     canvas3.save_ppm("test_result3.ppm");
+
+    DrawModel<CelShader>(canvas3, model, mtl, vShader, Vec3{0, 1.5, 3});
+    canvas3.save_ppm("test_result4.ppm");
+
+    DrawModel<UnlitShader>(canvas3, model, mtl, vShader, Vec3{0, 1.5, 3});
+    canvas3.save_ppm("test_result5.ppm");
     return 0;
 }

@@ -41,13 +41,17 @@ public:
         if (baseColor.x == 0 && baseColor.y == 0 && baseColor.z == 0) {
             baseColor = Vec3{0.5f, 0.5f, 0.5f};
         }
-        const Vec3 specColor = Vec3{1.0f, 1.0f, 1.0f} * specular;
-        const Vec3 result = baseColor * diff + mtl.ambient * globalAmbientIntensity + specColor;
-
+        baseColor = baseColor * diff + Vec3{1.0f, 1.0f, 1.0f} * specular;
+        constexpr float gamma = 1.4f;
+        const Vec3 finalColor{
+            std::pow(std::max(baseColor.x, 0.0f), 1.0f / gamma),
+            std::pow(std::max(baseColor.y, 0.0f), 1.0f / gamma),
+            std::pow(std::max(baseColor.z, 0.0f), 1.0f / gamma)
+        };
         return Vec3{
-            std::min(result.x, 1.0f),
-            std::min(result.y, 1.0f),
-            std::min(result.z, 1.0f)
+            std::min(finalColor.x, 1.0f),
+            std::min(finalColor.y, 1.0f),
+            std::min(finalColor.z, 1.0f)
         };
     }
 private:

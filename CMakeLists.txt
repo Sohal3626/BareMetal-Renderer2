@@ -37,6 +37,8 @@ add_executable(ToyRenderer2
         include/data/Texture.h
         include/library/stb_img.h
         src/stb_img_impl.cpp
+        include/Fragment/CelShader.h
+        include/Fragment/UnlitShader.h
 )
 
 if(OpenMP_CXX_FOUND)
