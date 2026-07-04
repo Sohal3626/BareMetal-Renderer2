@@ -34,7 +34,9 @@ public:
 
         const float diff = std::max(N.dot(L), 0.f);
 
-        Vec3 baseColor = mtl.diffuse;
+        const auto& tex = mtl.texture;
+        const auto& uv  = in.texCoord;
+        Vec3 baseColor = (tex != nullptr) ? tex->get_color(uv.x, uv.y) : mtl.diffuse;
         if (baseColor.x == 0 && baseColor.y == 0 && baseColor.z == 0) {
             baseColor = Vec3{0.5f, 0.5f, 0.5f};
         }
@@ -50,7 +52,7 @@ public:
         };
     }
 private:
-    const float globalAmbientIntensity = 0.5f;
+    const float globalAmbientIntensity = 0.0f;
     static inline Vec3 reflect(const Vec3& I, const Vec3& N) { return I - N * (2.0f * I.dot(N)); }
 };
 

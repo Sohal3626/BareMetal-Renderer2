@@ -20,10 +20,10 @@ int main() {
     Canvas canvas3(width, height);
 
     Mesh model;
-    model.loadObj("../obj/african_head.obj");
+    model.loadObj("../obj/Miyu.obj");
 
     Material mtl;
-    mtl.loadMtl("../mtl/Mymtl.mtl");
+    mtl.loadMtl("../mtl/miyu.mtl");
 
     // 3. 행렬 준비
     Mat44 modelMat;
@@ -32,7 +32,7 @@ int main() {
 
     Mat44 viewMat;
 
-    translate(viewMat, 0, 0, -1.f);
+    translate(viewMat, 0, -0.8f, -1.f);
     const Mat44 projectionMat =
         perspective(45.0f, static_cast<float>(width)/static_cast<float>(height), 0.1f, 1000.0f);
 

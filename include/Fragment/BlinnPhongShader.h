@@ -35,7 +35,9 @@ public:
         const Vec3 H = normalize(L + V);
         const float specular = pow(std::max(N.dot(H), 0.0f), mtl.shininess);
 
-        Vec3 baseColor = mtl.diffuse;
+        const auto& tex = mtl.texture;
+        const auto& uv  = in.texCoord;
+        Vec3 baseColor = (tex != nullptr) ? tex->get_color(uv.x, uv.y) : mtl.diffuse;
         if (baseColor.x == 0 && baseColor.y == 0 && baseColor.z == 0) {
             baseColor = Vec3{0.5f, 0.5f, 0.5f};
         }
@@ -49,7 +51,7 @@ public:
         };
     }
 private:
-    const float globalAmbientIntensity = 0.5f;
+    const float globalAmbientIntensity = 0.0f;
 };
 
 #endif //TOYRENDERER2_BLINNPHONGSHADER_H
