@@ -21,10 +21,7 @@
 - .mtl File parsing
 - Flat Shading
 - Phong Shading
-
-### 예정 기능
 - Texture Mapping
-- Alpha blending
   
 ## 개발 일지
 제 코드를 참고하실 분들이 쉽게 이해할 수 있도록 개발 일지를 제공합니다.  
